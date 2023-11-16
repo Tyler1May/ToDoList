@@ -7,12 +7,8 @@
 
 import Foundation
 
-struct Item: Identifiable {
-    let id: String
-    let title: String
-    let createdAt: Date?
-    var completedAt: Date?
-    
+extension Item {
+
     // Computed
     
     var createdAtDate: Date {
@@ -40,43 +36,8 @@ struct Item: Identifiable {
         guard let completedAt else { return nil }
         return Item.relativeDateFormatter.localizedString(for: completedAt, relativeTo: Date())
     }
-    
-
-    // Remove for Core Data
-    // Init
-    init(id: String = UUID().uuidString, title: String, createdAt: Date = Date(), completedAt: Date? = nil) {
-        self.id = id
-        self.title = title
-        self.createdAt = createdAt
-        self.completedAt = completedAt
-    }
-    
 }
 
-// Remove for Core Data
-// MARK: - Equatable
-
-extension Item: Equatable {
-    
-    static func ==(lhs: Item, rhs: Item) -> Bool {
-        return lhs.id == rhs.id &&
-        lhs.title == rhs.title &&
-        lhs.createdAt == rhs.createdAt &&
-        lhs.completedAt == rhs.completedAt
-    }
-    
-}
-
-// Remove for Core Data
-// MARK: - Hashable
-
-extension Item: Hashable {
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-    
-}
 
 
 // MARK: - Date Formatter

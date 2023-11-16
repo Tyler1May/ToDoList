@@ -17,6 +17,9 @@
 		2E26E13428FB6BDF00717208 /* ToDoist.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2E26E13228FB6BDF00717208 /* ToDoist.xcdatamodeld */; };
 		2E26E13628FB6BE000717208 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2E26E13528FB6BE000717208 /* Assets.xcassets */; };
 		2E26E13928FB6BE000717208 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2E26E13728FB6BE000717208 /* LaunchScreen.storyboard */; };
+		F7DB800A2B02806500616AAA /* PersistenceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7DB80092B02806500616AAA /* PersistenceController.swift */; };
+		F7E1DCC32B03D14000A662D5 /* ToDoList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E1DCC22B03D14000A662D5 /* ToDoList.swift */; };
+		F7E1DCC52B03D3F500A662D5 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7E1DCC42B03D3F500A662D5 /* ListsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		2E26E13528FB6BE000717208 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2E26E13828FB6BE000717208 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2E26E13A28FB6BE000717208 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F7DB80092B02806500616AAA /* PersistenceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceController.swift; sourceTree = "<group>"; };
+		F7E1DCC22B03D14000A662D5 /* ToDoList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoList.swift; sourceTree = "<group>"; };
+		F7E1DCC42B03D3F500A662D5 /* ListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,19 +70,30 @@
 		2E26E12828FB6BDF00717208 /* ToDoist */ = {
 			isa = PBXGroup;
 			children = (
+				F7DB800F2B02856300616AAA /* CoreData */,
 				2E26E12928FB6BDF00717208 /* AppDelegate.swift */,
 				2E26E12B28FB6BDF00717208 /* SceneDelegate.swift */,
+				F7E1DCC42B03D3F500A662D5 /* ListsViewController.swift */,
 				2E26E12D28FB6BDF00717208 /* ItemsViewController.swift */,
 				2E176FDF2903B9E4001B5AE6 /* ItemManager.swift */,
 				2E176FE12903BA15001B5AE6 /* Item.swift */,
 				2E176FDD2903B30B001B5AE6 /* ItemTableViewCell.swift */,
+				F7DB80092B02806500616AAA /* PersistenceController.swift */,
+				F7E1DCC22B03D14000A662D5 /* ToDoList.swift */,
 				2E26E12F28FB6BDF00717208 /* Main.storyboard */,
 				2E26E13528FB6BE000717208 /* Assets.xcassets */,
 				2E26E13728FB6BE000717208 /* LaunchScreen.storyboard */,
 				2E26E13A28FB6BE000717208 /* Info.plist */,
-				2E26E13228FB6BDF00717208 /* ToDoist.xcdatamodeld */,
 			);
 			path = ToDoist;
+			sourceTree = "<group>";
+		};
+		F7DB800F2B02856300616AAA /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				2E26E13228FB6BDF00717208 /* ToDoist.xcdatamodeld */,
+			);
+			path = CoreData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -151,12 +168,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				2E26E12E28FB6BDF00717208 /* ItemsViewController.swift in Sources */,
+				F7E1DCC32B03D14000A662D5 /* ToDoList.swift in Sources */,
 				2E26E12A28FB6BDF00717208 /* AppDelegate.swift in Sources */,
 				2E176FDE2903B30B001B5AE6 /* ItemTableViewCell.swift in Sources */,
+				F7E1DCC52B03D3F500A662D5 /* ListsViewController.swift in Sources */,
 				2E26E13428FB6BDF00717208 /* ToDoist.xcdatamodeld in Sources */,
 				2E176FE22903BA15001B5AE6 /* Item.swift in Sources */,
 				2E176FE02903B9E4001B5AE6 /* ItemManager.swift in Sources */,
 				2E26E12C28FB6BDF00717208 /* SceneDelegate.swift in Sources */,
+				F7DB800A2B02806500616AAA /* PersistenceController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,7 +7,24 @@
 
 import UIKit
 
+protocol ItemsViewControllerDelegate {
+    func receiveItems(_:ItemsViewController, items: [Item], indexPath: IndexPath)
+}
+
 class ItemsViewController: UIViewController {
+    
+    var selectedToDoList: ToDoList?
+    var delegate: ItemsViewControllerDelegate?
+    var indexPath: IndexPath?
+    
+    init?(coder: NSCoder, with toDoList: ToDoList) {
+        super.init(coder: coder)
+        selectedToDoList = toDoList
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     enum TableSection: Int, CaseIterable {
         case incomplete, complete
@@ -29,6 +46,7 @@ class ItemsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.reloadData()
+        
     }
 
 }
@@ -37,18 +55,19 @@ class ItemsViewController: UIViewController {
 // MARK: - Private
 
 private extension ItemsViewController {
-    
+
     func item(at indexPath: IndexPath) -> Item {
         let tableSection = TableSection(rawValue: indexPath.section)!
         switch tableSection {
         case .incomplete:
-            return itemManager.incompleteItems()[indexPath.row]
+            return (selectedToDoList?.itemsArray[indexPath.row])!
         case .complete:
-            return itemManager.completedItems()[indexPath.row]
+            return (selectedToDoList?.itemsArray[indexPath.row])!
         }
     }
-    
+
 }
+
 
 
 // MARK: - TableView DataSource
@@ -57,11 +76,12 @@ extension ItemsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let tableSection = TableSection(rawValue: section)!
+        let items = selectedToDoList?.itemsArray
         switch tableSection {
         case .incomplete:
-            return "To-Do (\(itemManager.incompleteItems().count))"
+            return "To-Do (\(items?.filter { $0.isCompleted == false }.count ?? 0))"
         case .complete:
-            return "Completed (\(itemManager.completedItems().count))"
+            return "Completed (\(items?.filter { $0.isCompleted }.count ?? 0))"
         }
     }
     
@@ -73,16 +93,23 @@ extension ItemsViewController: UITableViewDataSource {
         let tableSection = TableSection(rawValue: section)!
         switch tableSection {
         case .incomplete:
-            return itemManager.incompleteItems().count
+            return selectedToDoList?.itemsArray.filter { !$0.isCompleted }.count ?? 0
         case .complete:
-            return itemManager.completedItems().count
+            return selectedToDoList?.itemsArray.filter { $0.isCompleted }.count ?? 0
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ItemTableViewCell.reuseIdentifier) as! ItemTableViewCell
-        let item = item(at: indexPath)
+        guard let itemsArray = selectedToDoList?.itemsArray else {
+            return cell
+        }
+        
+        let tableSection = TableSection(rawValue: indexPath.section)!
+        let items = (tableSection == .incomplete) ? itemsArray.filter { !$0.isCompleted } : itemsArray.filter { $0.isCompleted }
+        let item = items[indexPath.row]
         cell.update(with: item)
+        
         return cell
     }
 
@@ -95,8 +122,13 @@ extension ItemsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else { return }
-        itemManager.delete(at: indexPath)
+        guard let selectedToDoList = selectedToDoList else {
+            return
+        }
+        itemManager.delete(at: indexPath, from: selectedToDoList)
         tableView.deleteRows(at: [indexPath], with: .automatic)
+        tableView.reloadData()
+        delegate?.receiveItems(self, items: selectedToDoList.itemsArray, indexPath: indexPath)
     }
     
 }
@@ -108,7 +140,8 @@ extension ItemsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         let item = item(at: indexPath)
-        itemManager.toggleItemCompletion(item)
+        itemManager.toggleItemCompletion(item, in: selectedToDoList!)
+        
         tableView.reloadData()
     }
     
@@ -120,11 +153,17 @@ extension ItemsViewController: UITableViewDelegate {
 extension ItemsViewController: UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        guard let text = textField.text, !text.isEmpty else { return true }
-        itemManager.createNewItem(with: text)
+        guard let text = textField.text, !text.isEmpty, let selectedToDoList = selectedToDoList, let indexPath = indexPath else {
+            return true
+        }
+
+        itemManager.createNewItem(with: text, for: selectedToDoList)
+        delegate?.receiveItems(self, items: selectedToDoList.itemsArray, indexPath: indexPath)
+
         tableView.reloadSections([TableSection.incomplete.rawValue], with: .automatic)
         textField.text = ""
         return true
     }
+
     
 }
